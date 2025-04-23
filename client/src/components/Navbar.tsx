@@ -5,9 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { Button } from "./ui/button";
-// import { useGetAuthUserQuery } from "@/state/api";
+import { useGetAuthUserQuery } from "@/state/api";
 import { usePathname, useRouter } from "next/navigation";
-// import { signOut } from "aws-amplify/auth";
+import { signOut } from "aws-amplify/auth";
 import { Bell, MessageCircle, Plus, Search } from "lucide-react";
 import {
   DropdownMenu,
@@ -20,7 +20,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { SidebarTrigger } from "./ui/sidebar";
 
 const Navbar = () => {
-  //   const { data: authUser } = useGetAuthUserQuery();
+  const { data: authUser } = useGetAuthUserQuery();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -28,7 +28,7 @@ const Navbar = () => {
     pathname.includes("/managers") || pathname.includes("/tenants");
 
   const handleSignOut = async () => {
-    // await signOut();
+    await signOut();
     window.location.href = "/";
   };
 
@@ -52,31 +52,32 @@ const Navbar = () => {
             <div className="flex items-center gap-3">
               <Image
                 src="/logo.svg"
-                alt="Loadout Logo"
+                alt="Load Out logo"
                 width={24}
                 height={24}
                 className="w-6 h-6"
               />
               <div className="text-xl font-bold">
-                RENT
+                LOAD
                 <span className="text-secondary-500 font-light hover:!text-primary-300">
-                  IFUL
+                  OUT
                 </span>
               </div>
             </div>
           </Link>
-          {isDashboardPage && true && (
+          {isDashboardPage && authUser && (
             <Button
               variant="secondary"
               className="md:ml-4 bg-primary-50 text-primary-700 hover:bg-secondary-500 hover:text-primary-50"
               onClick={() =>
                 router.push(
-                  // authUser.userRole?.toLowerCase() === "manager"
-                  false ? "/managers/newproperty" : "/search"
+                  authUser.userRole?.toLowerCase() === "manager"
+                    ? "/managers/newproperty"
+                    : "/search"
                 )
               }
             >
-              {false ? (
+              {authUser.userRole?.toLowerCase() === "manager" ? (
                 <>
                   <Plus className="h-4 w-4" />
                   <span className="hidden md:block ml-2">Add New Property</span>
@@ -98,7 +99,7 @@ const Navbar = () => {
           </p>
         )}
         <div className="flex items-center gap-5">
-          {false ? (
+          {authUser ? (
             <>
               <div className="relative hidden md:block">
                 <MessageCircle className="w-6 h-6 cursor-pointer text-primary-200 hover:text-primary-400" />
@@ -112,13 +113,13 @@ const Navbar = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger className="flex items-center gap-2 focus:outline-none">
                   <Avatar>
-                    {/* <AvatarImage src={authUser.userInfo?.image} /> */}
+                    <AvatarImage src={authUser.userInfo?.image} />
                     <AvatarFallback className="bg-primary-600">
-                      {/* {authUser.userRole?.[0].toUpperCase()} */}
+                      {authUser.userRole?.[0].toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <p className="text-primary-200 hidden md:block">
-                    {/* {authUser.userInfo?.name} */}
+                    {authUser.userInfo?.name}
                   </p>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-white text-primary-700">
@@ -126,8 +127,9 @@ const Navbar = () => {
                     className="cursor-pointer hover:!bg-primary-700 hover:!text-primary-100 font-bold"
                     onClick={() =>
                       router.push(
-                        // authUser.userRole?.toLowerCase() === "manager"
-                        false ? "/managers/properties" : "/tenants/favorites",
+                        authUser.userRole?.toLowerCase() === "manager"
+                          ? "/managers/properties"
+                          : "/tenants/favorites",
                         { scroll: false }
                       )
                     }
@@ -137,12 +139,12 @@ const Navbar = () => {
                   <DropdownMenuSeparator className="bg-primary-200" />
                   <DropdownMenuItem
                     className="cursor-pointer hover:!bg-primary-700 hover:!text-primary-100"
-                    // onClick={() =>
-                    //   router.push(
-                    //     `/${authUser.userRole?.toLowerCase()}s/settings`,
-                    //     { scroll: false }
-                    //   )
-                    // }
+                    onClick={() =>
+                      router.push(
+                        `/${authUser.userRole?.toLowerCase()}s/settings`,
+                        { scroll: false }
+                      )
+                    }
                   >
                     Settings
                   </DropdownMenuItem>

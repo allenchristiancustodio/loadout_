@@ -1,6 +1,7 @@
-import React, { use, useEffect } from "react";
-import { Amplify } from "aws-amplify";
+"use client";
 
+import React, { useEffect } from "react";
+import { Amplify } from "aws-amplify";
 import {
   Authenticator,
   Heading,
@@ -27,19 +28,18 @@ const components = {
   Header() {
     return (
       <View className="mt-4 mb-7">
-        <Heading level={3} className="!text-5xl !font-bold">
-          Load
-          <span className="text-secondary-600 font-normal hover:!text-primary-300">
-            Out
+        <Heading level={3} className="!text-2xl !font-bold">
+          RENT
+          <span className="text-secondary-500 font-light hover:!text-primary-300">
+            IFUL
           </span>
         </Heading>
-        <p className="text-muted-foreground mt-2 !text-lg">
+        <p className="text-muted-foreground mt-2">
           <span className="font-bold">Welcome!</span> Please sign in to continue
         </p>
       </View>
     );
   },
-
   SignIn: {
     Footer() {
       const { toSignUp } = useAuthenticator();
@@ -61,6 +61,7 @@ const components = {
   SignUp: {
     FormFields() {
       const { validationErrors } = useAuthenticator();
+
       return (
         <>
           <Authenticator.SignUp.FormFields />
@@ -77,6 +78,7 @@ const components = {
         </>
       );
     },
+
     Footer() {
       const { toSignIn } = useAuthenticator();
       return (
@@ -87,7 +89,7 @@ const components = {
               onClick={toSignIn}
               className="text-primary hover:underline bg-transparent border-none p-0"
             >
-              Sign in here
+              Sign in
             </button>
           </p>
         </View>
@@ -142,20 +144,18 @@ const Auth = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  // redirect auth users away from auth pages
-
-  const isAuthPage = pathname.match(/^\/(signin | signup)$/);
+  const isAuthPage = pathname.match(/^\/(signin|signup)$/);
   const isDashboardPage =
-    pathname.startsWith("/manager") || pathname.startsWith("/tenant");
+    pathname.startsWith("/manager") || pathname.startsWith("/tenants");
 
+  // Redirect authenticated users away from auth pages
   useEffect(() => {
     if (user && isAuthPage) {
       router.push("/");
     }
   }, [user, isAuthPage, router]);
 
-  //Allow ac cess to public pages without auth
-
+  // Allow access to public pages without authentication
   if (!isAuthPage && !isDashboardPage) {
     return <>{children}</>;
   }
