@@ -1,24 +1,21 @@
-**/node_modules/
-**/dist/
-
+# Root-level ignores
+node_modules/
+dist/
 .env
-client/.env.local
-client/.env.development
-client/.env.production
-server/.env
-
-client/.next/
-
+.vscode/
 .DS_Store
 Thumbs.db
 
-.vscode/
-
-client/node_modules/
-server/node_modules/
-client/dist/
-server/dist/
+# Client-specific
+client/.env.local
+client/.env.development
+client/.env.production
 client/.env
-server/.env
 client/.next/
-node_modules
+client/node_modules/
+client/dist/
+
+# Server-specific
+server/.env
+server/node_modules/
+server/dist/
