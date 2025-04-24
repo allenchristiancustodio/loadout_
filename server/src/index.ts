@@ -10,7 +10,7 @@ import { authMiddleware } from "./middleware/authMiddleware";
 
 import tenantRoutes from "./routes/tenantRoutes";
 import managerRoutes from "./routes/managerRoutes";
-
+import propertyRoutes from "./routes/propertyRoutes";
 
 /* CONFIGURATIONS */
 
@@ -31,6 +31,7 @@ app.get("/", (req, res) => {
 
 app.use("/tenants", authMiddleware(["tenant"]), tenantRoutes);
 app.use("/managers", authMiddleware(["manager"]), managerRoutes);
+app.use("properties", propertyRoutes);
 
 /* SERVER */
 const port = Number(process.env.PORT) || 3002;
