@@ -21,6 +21,7 @@ import {
 import { NAVBAR_HEIGHT } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import link from "next/link";
 
 const AppSideBar = ({ userType }: AppSidebarProps) => {
   const pathname = usePathname();
@@ -95,7 +96,7 @@ const AppSideBar = ({ userType }: AppSidebarProps) => {
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
-              <SidebarMenuItem>
+              <SidebarMenuItem key={link.href}>
                 <SidebarMenuButton
                   asChild
                   className={cn(
