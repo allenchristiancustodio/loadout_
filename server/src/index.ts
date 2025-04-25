@@ -34,7 +34,7 @@ app.get("/", (req, res) => {
 app.use("/applications", applicationRoutes);
 app.use("/tenants", authMiddleware(["tenant"]), tenantRoutes);
 app.use("/managers", authMiddleware(["manager"]), managerRoutes);
-app.use("properties", propertyRoutes);
+app.use("/properties", propertyRoutes);
 app.use("/leases", leaseRoutes);
 
 /* SERVER */
